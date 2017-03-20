@@ -1,23 +1,20 @@
 package com.example.android.miwok;
 
-/**
- * Created by Jojih on 20/03/2017.
- */
 
-public class Word {
+class Word {
     private String mDefaultTranslation;
     private String mMiwokTranslation;
 
     public Word(String mDefaultTranslation, String mMiwokTranslation) {
-        this.mDefaultTranslation = mDefaultTranslation;
         this.mMiwokTranslation = mMiwokTranslation;
-    }
-
-    public String getmDefaultTranslation() {
-        return mDefaultTranslation;
+        this.mDefaultTranslation = mDefaultTranslation;
     }
 
     public String getMiwokTranslation() {
         return mMiwokTranslation;
+    }
+
+    public String getmDefaultTranslation() {
+        return mDefaultTranslation;
     }
 }
