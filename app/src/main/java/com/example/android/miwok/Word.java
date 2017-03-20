@@ -4,7 +4,7 @@ package com.example.android.miwok;
 class Word {
     private String mDefaultTranslation;
     private String mMiwokTranslation;
-    private int mImageResourceID;
+    private int mImageResourceID = NO_IMAGE_PROVIDED;
     private static final int NO_IMAGE_PROVIDED = -1;
 
     public Word(String mDefaultTranslation, String mMiwokTranslation) {

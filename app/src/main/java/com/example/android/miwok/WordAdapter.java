@@ -1,6 +1,7 @@
 package com.example.android.miwok;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,11 @@ import java.util.ArrayList;
 
 class WordAdapter extends ArrayAdapter<Word> {
 
-    public WordAdapter(Context context, ArrayList<Word> words) {
+    private int categoryBackgroundColor;
+
+    public WordAdapter(Context context, ArrayList<Word> words, int categoryBackgroundColor) {
         super(context, 0, words);
+        this.categoryBackgroundColor = categoryBackgroundColor;
     }
 
     @Override
@@ -25,7 +29,6 @@ class WordAdapter extends ArrayAdapter<Word> {
         if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
         }
-
         Word currentWord = getItem(position);
 
         TextView miwokTextView = (TextView) listItemView.findViewById(R.id.miwok_text_view);
@@ -34,10 +37,19 @@ class WordAdapter extends ArrayAdapter<Word> {
         TextView defaultTextView = (TextView) listItemView.findViewById(R.id.default_text_view);
         defaultTextView.setText(currentWord.getmDefaultTranslation());
 
+        ImageView iconView = (ImageView) listItemView.findViewById(R.id.list_item_icon);
         if (currentWord.hasImage()) {
-            ImageView iconView = (ImageView) listItemView.findViewById(R.id.list_item_icon);
             iconView.setImageResource(currentWord.getmImageResourceID());
+            iconView.setVisibility(View.VISIBLE);
+
+        } else {
+            iconView.setVisibility(View.GONE);
         }
+
+        View textContainer = listItemView.findViewById(R.id.text_container);
+        int color = ContextCompat.getColor(getContext(), categoryBackgroundColor);
+        textContainer.setBackgroundColor(color);
+
         return listItemView;
     }
 }
