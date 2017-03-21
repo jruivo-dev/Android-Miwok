@@ -21,6 +21,7 @@ class WordAdapter extends ArrayAdapter<Word> {
         this.categoryBackgroundColor = categoryBackgroundColor;
     }
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -49,6 +50,9 @@ class WordAdapter extends ArrayAdapter<Word> {
         View textContainer = listItemView.findViewById(R.id.text_container);
         int color = ContextCompat.getColor(getContext(), categoryBackgroundColor);
         textContainer.setBackgroundColor(color);
+
+
+
 
         return listItemView;
     }
