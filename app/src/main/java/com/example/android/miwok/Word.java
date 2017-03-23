@@ -22,6 +22,16 @@ class Word {
 
     }
 
+    @Override
+    public String toString() {
+        return "Word{" +
+                "mDefaultTranslation='" + mDefaultTranslation + '\'' +
+                ", mMiwokTranslation='" + mMiwokTranslation + '\'' +
+                ", mImageResourceID=" + mImageResourceID +
+                ", mSoundID=" + mSoundID +
+                '}';
+    }
+
     public String getMiwokTranslation() {
         return mMiwokTranslation;
     }
