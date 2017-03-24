@@ -1,6 +1,7 @@
 package com.example.android.miwok;
 
-import android.graphics.Color;
+import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+
+import static android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK;
 
 public class ColorsActivity extends AppCompatActivity {
     private MediaPlayer mMediaPlayer;
@@ -19,10 +22,31 @@ public class ColorsActivity extends AppCompatActivity {
         }
     };
 
+    private AudioManager mAudioManager;
+    // Request audio focus for playback
+    AudioManager.OnAudioFocusChangeListener mOnAudioFocusListener =
+            new AudioManager.OnAudioFocusChangeListener() {
+                public void onAudioFocusChange(int focusChange) {
+                    if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+                        mMediaPlayer.pause();
+                        mMediaPlayer.seekTo(0);
+                    } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+                        mMediaPlayer.start();
+                    } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+                        releaseMediaPlayer();
+                    }
+                    // Your app has been granted audio focus again
+                    // Raise volume to normal, restart playback if necessary
+                }
+            };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.words_list);
+
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
 
         final ArrayList<Word> words = new ArrayList<Word>();
         words.add(new Word("red", "weṭeṭṭi", R.drawable.color_red, R.raw.color_red));
@@ -41,13 +65,32 @@ public class ColorsActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Word word = words.get(position);
                 releaseMediaPlayer();
-                mMediaPlayer = MediaPlayer.create(ColorsActivity.this, words.get(position).getmSoundID());
-                mMediaPlayer.start();
-                mMediaPlayer.setOnCompletionListener(mCompletionListener);
 
+                int result = mAudioManager.requestAudioFocus(mOnAudioFocusListener,
+                        // Use the music stream.
+                        AudioManager.STREAM_MUSIC,
+                        // Request permanent focus.
+                        AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+
+                if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                    //we have audiofocus now
+                    mMediaPlayer = MediaPlayer.create(ColorsActivity.this, words.get(position).getmSoundID());
+                    mMediaPlayer.start();
+                    mMediaPlayer.setOnCompletionListener(mCompletionListener);
+                }
             }
         });
+
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        releaseMediaPlayer();
+        mAudioManager.abandonAudioFocus(mOnAudioFocusListener);
     }
 
     /**
