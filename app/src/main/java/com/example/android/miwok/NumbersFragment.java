@@ -52,17 +52,9 @@ public class NumbersFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.word_list, container, false);
-
-        /** TODO: Insert all the code from the NumberActivity’s onCreate() method after the setContentView method call */
-
-        //TODO: Fix the action bar thing
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-// Create a list of words
 
         mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
@@ -128,6 +120,8 @@ public class NumbersFragment extends Fragment {
             // setting the media player to null is an easy way to tell that the media player
             // is not configured to play an audio file at the moment.
             mMediaPlayer = null;
+            mAudioManager.abandonAudioFocus(mOnAudioFocusListener);
+
         }
     }
 }
