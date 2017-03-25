@@ -43,7 +43,7 @@ public class ColorsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.words_list);
+        setContentView(R.layout.word_list);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
